@@ -177,7 +177,11 @@ a { color: inherit; text-decoration: none; }
 .nav-toggle {
   display: none;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   gap: 5px;
+  min-width: 44px;
+  min-height: 44px;
   background: none;
   border: none;
   cursor: pointer;
