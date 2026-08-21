@@ -359,9 +359,14 @@ a { color: inherit; text-decoration: none; }
 .hero-badge span { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-400); }
 
 @media (max-width: 720px) {
-  .hero { min-height: 84vh; align-items: flex-end; }
+  /* .hero is display:flex (row) at the base breakpoint; .hero-badge sits
+     outside .hero-content as a sibling, so switching it to position:static
+     here makes it a second flex item in that same row unless the container
+     is told to stack — without this it gets squeezed into the row
+     alongside the full-width text card and pushed off the right edge. */
+  .hero { min-height: 84vh; flex-direction: column; align-items: stretch; justify-content: flex-end; }
   .hero-card { padding: 28px 26px 26px; border-radius: 16px; }
-  .hero-badge { position: static; margin: 16px 24px 0; width: fit-content; }
+  .hero-badge { position: static; margin: 16px 24px 24px; width: fit-content; }
   .hero-content { padding-bottom: 28px; }
 }
 
