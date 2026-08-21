@@ -288,7 +288,7 @@ a { color: inherit; text-decoration: none; }
   top: -10%; left: 0;
   width: 100%; height: 122%;
   object-fit: cover;
-  object-position: 62% 45%;
+  object-position: 58% 38%;
   transform: translateY(0) scale(1.05);
   will-change: transform;
 }

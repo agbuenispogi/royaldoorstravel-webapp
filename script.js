@@ -1,23 +1,20 @@
 // Full-screen door preloader — only for a genuine landing on the homepage
-// itself (index.html with no hash), and only once per browser tab session.
-// Deep links straight into a section — "Packages" or "Destinations" clicked
-// from another page, which land on index.html#packages / #destinations —
-// never trigger it, since arriving with a hash means the visitor asked for
-// that section, not the homepage intro. Locks scroll while closed, then
-// removes itself from the DOM once the open animation has finished so it
-// can't block clicks or show up in the tab order.
+// itself (index.html with no hash). Deep links straight into a section —
+// "Packages" or "Destinations" clicked from another page, which land on
+// index.html#packages / #destinations — never trigger it, since arriving
+// with a hash means the visitor asked for that section, not the homepage
+// intro. Plays on every plain homepage load/reload (deliberately not
+// remembered across reloads — a "seen it once, never again" flag makes the
+// site feel broken when reloading to double check something, which is far
+// more common in practice than a visitor reloading the homepage on repeat).
+// Locks scroll while closed, then removes itself from the DOM once the open
+// animation has finished so it can't block clicks or show up in the tab order.
 const prefersReducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const preloader = document.getElementById("preloader");
 if (preloader) {
-  let alreadyPlayed = false;
-  try {
-    alreadyPlayed = sessionStorage.getItem("rdIntroPlayed") === "1";
-  } catch (err) {
-    // sessionStorage unavailable (privacy mode, etc.) — fall back to always playing
-  }
   const isDeepLink = window.location.hash.length > 0;
 
-  if (alreadyPlayed || isDeepLink) {
+  if (isDeepLink) {
     preloader.classList.add("preloader-done");
   } else {
     // matches the CSS delay + animation length for each motion preference, plus a small buffer
@@ -27,11 +24,6 @@ if (preloader) {
       preloader.classList.add("preloader-done");
       document.documentElement.style.overflow = "";
     }, openDurationMs);
-    try {
-      sessionStorage.setItem("rdIntroPlayed", "1");
-    } catch (err) {
-      // ignore — worst case it just plays again next time
-    }
   }
 }
 
