@@ -187,19 +187,23 @@ a { color: inherit; text-decoration: none; }
 
 /* ------------------------------ preloader ---------------------------------- */
 /* a full-viewport pair of royal doors, shown once on first paint, that swing
-   open to reveal the page. perspective lives on the fixed wrapper so the
-   doors (its children) get true hinge-rotation foreshortening. */
-
-/* deliberately no background here: the two door panels below are what's
-   opaque. that way the reveal works from CSS alone the instant they rotate
-   open — it doesn't depend on JS ever running or timing out correctly. */
+   open to reveal the page. deliberately NOT position:fixed — some preview/
+   embed hosts wrap pages in a scaled or transformed container, which per
+   spec makes fixed-position descendants anchor to that ancestor instead of
+   the real viewport (they render at whatever scroll offset the ancestor
+   sits at, not the top). sitting in normal flow as the first thing in
+   <body>, sized to the viewport height, is immune to that entirely —
+   it just IS the top of the page, no positioning trick required.
+   perspective lives here so the doors (its children) get true
+   hinge-rotation foreshortening. */
 .preloader {
-  position: fixed;
-  inset: 0;
+  position: relative;
+  width: 100%;
+  height: 100vh;
   z-index: 9999;
   overflow: hidden;
   perspective: 2600px;
-  pointer-events: none;
+  background: var(--navy-950);
 }
 .preloader-done { display: none; }
 
@@ -223,7 +227,6 @@ a { color: inherit; text-decoration: none; }
   top: 0; bottom: 0;
   width: 50%;
   z-index: 1;
-  pointer-events: auto;
   background-image:
     repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0 2px, transparent 2px 7px),
     linear-gradient(155deg, #1a4a86 0%, #0e2f61 45%, #071b3c 100%);
