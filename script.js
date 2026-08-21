@@ -1,9 +1,11 @@
-// Full-screen door preloader — plays once per browser tab session. Visiting
-// the homepage fresh (new tab, or first load) shows it; navigating back to
-// it afterwards (e.g. clicking "Packages" from another page, which lands on
-// index.html) does not replay it. Locks scroll while closed, then removes
-// itself from the DOM once the open animation has finished so it can't
-// block clicks or show up in the tab order.
+// Full-screen door preloader — only for a genuine landing on the homepage
+// itself (index.html with no hash), and only once per browser tab session.
+// Deep links straight into a section — "Packages" or "Destinations" clicked
+// from another page, which land on index.html#packages / #destinations —
+// never trigger it, since arriving with a hash means the visitor asked for
+// that section, not the homepage intro. Locks scroll while closed, then
+// removes itself from the DOM once the open animation has finished so it
+// can't block clicks or show up in the tab order.
 const prefersReducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const preloader = document.getElementById("preloader");
 if (preloader) {
@@ -13,8 +15,9 @@ if (preloader) {
   } catch (err) {
     // sessionStorage unavailable (privacy mode, etc.) — fall back to always playing
   }
+  const isDeepLink = window.location.hash.length > 0;
 
-  if (alreadyPlayed) {
+  if (alreadyPlayed || isDeepLink) {
     preloader.classList.add("preloader-done");
   } else {
     // matches the CSS delay + animation length for each motion preference, plus a small buffer
