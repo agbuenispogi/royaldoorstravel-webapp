@@ -1,16 +1,35 @@
-// Full-screen door preloader — locks scroll while closed, then removes
+// Full-screen door preloader — plays once per browser tab session. Visiting
+// the homepage fresh (new tab, or first load) shows it; navigating back to
+// it afterwards (e.g. clicking "Packages" from another page, which lands on
+// index.html) does not replay it. Locks scroll while closed, then removes
 // itself from the DOM once the open animation has finished so it can't
 // block clicks or show up in the tab order.
 const prefersReducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
 const preloader = document.getElementById("preloader");
 if (preloader) {
-  // matches the CSS delay + animation length for each motion preference, plus a small buffer
-  const openDurationMs = prefersReducedMotionQuery.matches ? 950 : 2500;
-  document.documentElement.style.overflow = "hidden";
-  window.setTimeout(() => {
+  let alreadyPlayed = false;
+  try {
+    alreadyPlayed = sessionStorage.getItem("rdIntroPlayed") === "1";
+  } catch (err) {
+    // sessionStorage unavailable (privacy mode, etc.) — fall back to always playing
+  }
+
+  if (alreadyPlayed) {
     preloader.classList.add("preloader-done");
-    document.documentElement.style.overflow = "";
-  }, openDurationMs);
+  } else {
+    // matches the CSS delay + animation length for each motion preference, plus a small buffer
+    const openDurationMs = prefersReducedMotionQuery.matches ? 950 : 2500;
+    document.documentElement.style.overflow = "hidden";
+    window.setTimeout(() => {
+      preloader.classList.add("preloader-done");
+      document.documentElement.style.overflow = "";
+    }, openDurationMs);
+    try {
+      sessionStorage.setItem("rdIntroPlayed", "1");
+    } catch (err) {
+      // ignore — worst case it just plays again next time
+    }
+  }
 }
 
 // Mobile nav toggle

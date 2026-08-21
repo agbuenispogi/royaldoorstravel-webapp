@@ -523,6 +523,10 @@ section { padding: 96px 0; }
 .ticket {
   display: grid;
   grid-template-columns: 1fr 108px;
+  grid-template-rows: 152px auto;
+  grid-template-areas:
+    "photo photo"
+    "main  stub";
   background: #fff;
   border: 1px solid var(--line-navy);
   border-radius: var(--radius-card);
@@ -532,12 +536,29 @@ section { padding: 96px 0; }
 }
 .ticket:hover { transform: translateY(-5px); box-shadow: 0 26px 48px -24px rgba(11, 42, 85, 0.5); }
 
-.ticket-main { padding: 24px 22px; display: flex; flex-direction: column; gap: 10px; }
+.ticket-photo { grid-area: photo; position: relative; overflow: hidden; background: var(--paper-100); }
+.ticket-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease; }
+.ticket:hover .ticket-photo img { transform: scale(1.07); }
+.ticket-photo .nights-pill {
+  position: absolute;
+  left: 12px; bottom: 12px;
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--navy-800);
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 10.5px;
+  letter-spacing: 0.03em;
+  padding: 5px 11px;
+  border-radius: 999px;
+}
+
+.ticket-main { grid-area: main; padding: 16px 20px 18px; display: flex; flex-direction: column; gap: 8px; }
 .ticket-route { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.1em; color: var(--gold-500); text-transform: uppercase; }
-.ticket-dest { font-family: var(--font-display); font-size: 22px; color: var(--navy-800); }
-.ticket-includes { font-size: 12.5px; color: var(--ink-400); line-height: 1.5; margin-top: 4px; }
+.ticket-dest { font-family: var(--font-display); font-size: 21px; color: var(--navy-800); }
+.ticket-includes { font-size: 12.5px; color: var(--ink-400); line-height: 1.5; margin-top: 2px; }
 
 .ticket-stub {
+  grid-area: stub;
   position: relative;
   background: var(--navy-800);
   color: var(--paper-50);
@@ -558,7 +579,6 @@ section { padding: 96px 0; }
   background-size: 16px 24px;
   background-repeat: repeat-y;
 }
-.ticket-stub .nights { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; color: rgba(247,243,234,0.65); }
 .ticket-stub .price { font-family: var(--font-mono); font-weight: 700; font-size: 19px; color: var(--gold-300); line-height: 1.2; }
 .ticket-stub .price small { display: block; font-size: 10px; color: rgba(247,243,234,0.55); font-weight: 500; }
 
